@@ -14,8 +14,9 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#165DFF',
-                        secondary: '#64748b',
+                        primary: '#0D47A1',
+                        secondary: '#546E7A',
+                        accent: '#2196F3',
                     },
                     fontFamily: {
                         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -26,102 +27,117 @@
     </script>
     <style type="text/tailwindcss">
         @layer utilities {
-            /* 极简玻璃卡片 */
-            .card {
-                @apply bg-white/80 dark:bg-dark/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800;
+            /* 高端轻奢玻璃卡片 */
+            .card-luxury {
+                @apply bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl rounded-2xl shadow-xl border border-white/20 dark:border-slate-700/30;
             }
-            /* 优雅动效 */
-            .hover-float {
-                transition: all 0.3s ease;
+            /* 优雅悬浮动效 */
+            .hover-luxury {
+                transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             }
-            .hover-float:hover {
-                transform: translateY(-3px);
+            .hover-luxury:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            }
+            /* 头像光晕特效 */
+            .avatar-glow {
+                box-shadow: 0 0 30px rgba(33, 150, 243, 0.25);
+            }
+            .dark .avatar-glow {
+                box-shadow: 0 0 30px rgba(33, 150, 243, 0.35);
             }
             /* 动态渐变背景 */
-            .gradient-bg {
-                background: linear-gradient(-45deg, #f8fafc, #e2e8f0, #f1f5f9, #cbd5e1);
+            .bg-gradient-luxury {
+                background: linear-gradient(-45deg, #F8FAFC, #E2E8F0, #F1F5F9, #DEE5ED);
                 background-size: 400% 400%;
-                animation: gradient 15s ease infinite;
+                animation: gradient 18s ease infinite;
             }
-            .dark .gradient-bg {
-                background: linear-gradient(-45deg, #0f172a, #1e293b, #334155, #0f172a);
+            .dark .bg-gradient-luxury {
+                background: linear-gradient(-45deg, #0F172A, #1E293B, #273444, #1E293B);
             }
             @keyframes gradient {
                 0% { background-position: 0% 50%; }
                 50% { background-position: 100% 50%; }
                 100% { background-position: 0% 50%; }
             }
+            /* 精致分割线 */
+            .divider {
+                @apply h-px w-16 bg-gradient-to-r from-transparent via-primary/30 to-transparent mx-auto my-4;
+            }
         }
     </style>
 </head>
-<body class="gradient-bg min-h-screen text-gray-800 dark:text-gray-100 transition-colors duration-300">
+<body class="bg-gradient-luxury min-h-screen text-slate-800 dark:text-slate-100 transition-colors duration-500">
     <!-- 主题切换按钮 -->
-    <button id="themeToggle" class="fixed top-6 right-6 w-10 h-10 rounded-full bg-white/90 dark:bg-dark/90 shadow-md flex items-center justify-center hover-float z-50">
-        <i class="fa fa-moon-o dark:hidden text-gray-600"></i>
-        <i class="fa fa-sun-o hidden dark:block text-yellow-400"></i>
+    <button id="themeToggle" class="fixed top-8 right-8 w-12 h-12 rounded-full bg-white/95 dark:bg-slate-800/95 shadow-lg flex items-center justify-center hover-luxury z-50 border border-slate-200 dark:border-slate-700">
+        <i class="fa fa-moon-o dark:hidden text-slate-600 text-lg"></i>
+        <i class="fa fa-sun-o hidden dark:block text-amber-400 text-lg"></i>
     </button>
 
     <!-- 主内容 -->
-    <main class="min-h-screen flex flex-col items-center justify-center px-4 py-16">
-        <!-- 核心卡片 -->
-        <div class="card p-8 md:p-10 w-full max-w-md hover-float">
-            <!-- 头像区域（已替换为本地图片） -->
-            <div class="flex flex-col items-center mb-6">
-                <div class="w-28 h-28 rounded-full bg-gray-100 dark:bg-gray-800 mb-5 overflow-hidden border-2 border-primary/20">
-                    <!-- 本地头像 核心修改处 -->
+    <main class="min-h-screen flex flex-col items-center justify-center px-4 py-20">
+        <!-- 核心高端卡片 -->
+        <div class="card-luxury p-10 md:p-12 w-full max-w-md hover-luxury">
+            <!-- 头像区域 -->
+            <div class="flex flex-col items-center mb-8">
+                <div class="w-36 h-36 rounded-full overflow-hidden border-4 border-white dark:border-slate-700 avatar-glow mb-6">
+                    <!-- 本地头像 -->
                     <img src="./TouXiang.jpg" class="w-full h-full object-cover" alt="神秘用户头像">
                 </div>
-                <h1 class="text-3xl font-bold mb-1">神秘用户</h1>
-                <p class="text-secondary text-sm tracking-wider">Digital Creator | Explorer</p>
+                <h1 class="text-4xl font-bold mb-2 tracking-tight">神秘用户</h1>
+                <p class="text-secondary text-base tracking-wider font-light">Digital Creator | Tech Explorer</p>
             </div>
 
+            <!-- 分割线 -->
+            <div class="divider"></div>
+
             <!-- 个人简介 -->
-            <div class="text-center mb-6">
-                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+            <div class="text-center mb-8">
+                <p class="text-slate-600 dark:text-slate-300 leading-relaxed text-lg">
                     隐匿于数字世界<br>
                     专注创作，简约而不简单
                 </p>
             </div>
 
             <!-- 核心技能模块 -->
-            <div class="mb-6">
-                <h3 class="text-center text-sm font-semibold text-secondary mb-3">核心技能</h3>
-                <div class="flex flex-wrap justify-center gap-2">
-                    <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs">创意设计</span>
-                    <span class="px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-xs">数字创作</span>
-                    <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs">技术探索</span>
-                    <span class="px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-xs">内容输出</span>
+            <div class="mb-8">
+                <h3 class="text-center text-sm font-semibold text-secondary uppercase tracking-widest mb-4">Core Skills</h3>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <span class="px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">创意设计</span>
+                    <span class="px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-sm">数字创作</span>
+                    <span class="px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">技术探索</span>
+                    <span class="px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-sm">内容输出</span>
                 </div>
             </div>
 
             <!-- 功能按钮 -->
-            <div class="grid grid-cols-2 gap-3 mb-6">
-                <a href="#" class="rounded-lg py-2.5 text-center border border-gray-200 dark:border-gray-700 hover:bg-primary/5 hover:border-primary/30 hover-float">
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <a href="#" class="rounded-xl py-3 text-center border border-slate-200 dark:border-slate-700 hover:bg-primary/5 hover:border-primary/30 hover-luxury font-medium">
                     <i class="fa fa-home mr-1"></i>主页
                 </a>
-                <a href="#" class="rounded-lg py-2.5 text-center border border-gray-200 dark:border-gray-700 hover:bg-primary/5 hover:border-primary/30 hover-float">
+                <a href="#" class="rounded-xl py-3 text-center border border-slate-200 dark:border-slate-700 hover:bg-primary/5 hover:border-primary/30 hover-luxury font-medium">
                     <i class="fa fa-th mr-1"></i>作品
                 </a>
-                <a href="#" class="rounded-lg py-2.5 text-center border border-gray-200 dark:border-gray-700 hover:bg-primary/5 hover:border-primary/30 hover-float">
+                <a href="#" class="rounded-xl py-3 text-center border border-slate-200 dark:border-slate-700 hover:bg-primary/5 hover:border-primary/30 hover-luxury font-medium">
                     <i class="fa fa-book mr-1"></i>日志
                 </a>
-                <a href="#" class="rounded-lg py-2.5 text-center border border-gray-200 dark:border-gray-700 hover:bg-primary/5 hover:border-primary/30 hover-float">
+                <a href="#" class="rounded-xl py-3 text-center border border-slate-200 dark:border-slate-700 hover:bg-primary/5 hover:border-primary/30 hover-luxury font-medium">
                     <i class="fa fa-envelope mr-1"></i>联系
                 </a>
             </div>
 
             <!-- 社交链接 -->
-            <div class="flex justify-center gap-6 text-xl mb-2">
-                <a href="#" class="text-secondary hover:text-primary hover-float"><i class="fa fa-github"></i></a>
-                <a href="#" class="text-secondary hover:text-primary hover-float"><i class="fa fa-twitter"></i></a>
-                <a href="#" class="text-secondary hover:text-primary hover-float"><i class="fa fa-weixin"></i></a>
-                <a href="#" class="text-secondary hover:text-primary hover-float"><i class="fa fa-link"></i></a>
+            <div class="flex justify-center gap-8 text-2xl">
+                <a href="#" class="text-secondary hover:text-accent hover-luxury"><i class="fa fa-github"></i></a>
+                <a href="#" class="text-secondary hover:text-accent hover-luxury"><i class="fa fa-twitter"></i></a>
+                <a href="#" class="text-secondary hover:text-accent hover-luxury"><i class="fa fa-weixin"></i></a>
+                <a href="#" class="text-secondary hover:text-accent hover-luxury"><i class="fa fa-link"></i></a>
             </div>
         </div>
 
-        <!-- 底部 -->
-        <footer class="mt-8 text-sm text-gray-500 dark:text-gray-400">
-            © 2025 神秘用户 · 保留所有权利
+        <!-- 底部版权 -->
+        <footer class="mt-12 text-sm text-slate-500 dark:text-slate-400 font-light">
+            © 2025 神秘用户 · All Rights Reserved
         </footer>
     </main>
 
