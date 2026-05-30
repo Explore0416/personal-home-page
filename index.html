@@ -1,269 +1,144 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>神秘用户 | 科技个人主页</title>
-    <!-- 引入图标与样式框架 -->
+    <title>神秘用户 | 个人主页</title>
+    <!-- 依赖库 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <!-- 自定义配置 -->
+    <!-- Tailwind 配置 -->
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        tech: {
-                            dark: '#050816',
-                            blue: '#00e5ff',
-                            purple: '#8b5cf6',
-                            cyan: '#22d3ee'
-                        }
+                        primary: '#165DFF',
+                        secondary: '#64748b',
                     },
                     fontFamily: {
-                        cyber: ['Orbitron', 'sans-serif']
-                    }
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
                 }
             }
         }
     </script>
     <style type="text/tailwindcss">
         @layer utilities {
-            /* 玻璃拟态 */
-            .glass {
-                background: rgba(255, 255, 255, 0.05);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                border: 1px solid rgba(0, 229, 255, 0.2);
+            /* 极简玻璃卡片 */
+            .card {
+                @apply bg-white/80 dark:bg-dark/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800;
             }
-            /* 霓虹发光文字 */
-            .neon-text {
-                text-shadow: 0 0 8px #00e5ff, 0 0 16px #00e5ff, 0 0 32px #8b5cf6;
+            /* 优雅动效 */
+            .hover-float {
+                transition: all 0.3s ease;
             }
-            /* 流光边框动画 */
-            .border-flow {
-                position: relative;
-                overflow: hidden;
+            .hover-float:hover {
+                transform: translateY(-3px);
             }
-            .border-flow::before {
-                content: '';
-                position: absolute;
-                top: -2px;
-                left: -2px;
-                width: calc(100% + 4px);
-                height: calc(100% + 4px);
-                background: linear-gradient(45deg, #00e5ff, #8b5cf6, #22d3ee, #00e5ff);
+            /* 动态渐变背景 */
+            .gradient-bg {
+                background: linear-gradient(-45deg, #f8fafc, #e2e8f0, #f1f5f9, #cbd5e1);
                 background-size: 400% 400%;
-                border-radius: inherit;
-                z-index: -1;
-                animation: flow 4s linear infinite;
+                animation: gradient 15s ease infinite;
             }
-            /* 粒子画布铺满全屏 */
-            #particles {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: -1;
+            .dark .gradient-bg {
+                background: linear-gradient(-45deg, #0f172a, #1e293b, #334155, #0f172a);
             }
-            /* 鼠标跟随光影 */
-            .cursor-light {
-                position: fixed;
-                width: 300px;
-                height: 300px;
-                border-radius: 50%;
-                background: radial-gradient(circle, rgba(0,229,255,0.15) 0%, rgba(0,229,255,0) 70%);
-                pointer-events: none;
-                transform: translate(-50%, -50%);
-                z-index: -1;
-                transition: 0.1s ease;
-            }
-            /* 动画定义 */
-            @keyframes flow {
+            @keyframes gradient {
                 0% { background-position: 0% 50%; }
                 50% { background-position: 100% 50%; }
                 100% { background-position: 0% 50%; }
             }
-            @keyframes float {
-                0%,100% { transform: translateY(0px); }
-                50% { transform: translateY(-10px); }
-            }
-            .float-anim {
-                animation: float 4s ease-in-out infinite;
-            }
         }
     </style>
-    <!-- 引入科技字体 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-tech-dark min-h-screen text-white overflow-x-hidden">
-    <!-- 粒子背景画布 -->
-    <canvas id="particles"></canvas>
-    <!-- 鼠标跟随光影 -->
-    <div class="cursor-light"></div>
+<body class="gradient-bg min-h-screen text-gray-800 dark:text-gray-100 transition-colors duration-300">
+    <!-- 主题切换按钮 -->
+    <button id="themeToggle" class="fixed top-6 right-6 w-10 h-10 rounded-full bg-white/90 dark:bg-dark/90 shadow-md flex items-center justify-center hover-float z-50">
+        <i class="fa fa-moon-o dark:hidden text-gray-600"></i>
+        <i class="fa fa-sun-o hidden dark:block text-yellow-400"></i>
+    </button>
 
-    <!-- 主内容区 -->
-    <main class="min-h-screen flex flex-col items-center justify-center px-4 py-12">
-        <!-- 主卡片 玻璃拟态+流光边框 -->
-        <div class="glass border-flow rounded-2xl p-8 md:p-12 w-full max-w-2xl float-anim">
-            <!-- 头像区域 -->
-            <div class="flex flex-col items-center mb-8">
-                <div class="w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-tech-blue/50 p-1 mb-6">
-                    <div class="w-full h-full rounded-full overflow-hidden bg-gray-800 flex items-center justify-center">
-                        <i class="fa fa-user-secret text-5xl text-tech-blue neon-text"></i>
-                    </div>
+    <!-- 主内容 -->
+    <main class="min-h-screen flex flex-col items-center justify-center px-4 py-16">
+        <!-- 核心卡片 -->
+        <div class="card p-8 md:p-10 w-full max-w-md hover-float">
+            <!-- 头像区域（已替换为本地图片） -->
+            <div class="flex flex-col items-center mb-6">
+                <div class="w-28 h-28 rounded-full bg-gray-100 dark:bg-gray-800 mb-5 overflow-hidden border-2 border-primary/20">
+                    <!-- 本地头像 核心修改处 -->
+                    <img src="./TouXiang.jpg" class="w-full h-full object-cover" alt="神秘用户头像">
                 </div>
-                <!-- 作者名称 -->
-                <h1 class="text-[clamp(2rem,5vw,3rem)] font-cyber font-bold neon-text mb-2">神秘用户</h1>
-                <p class="text-tech-cyan/80 text-lg tracking-widest">Anonymous · Tech Explorer</p>
+                <h1 class="text-3xl font-bold mb-1">神秘用户</h1>
+                <p class="text-secondary text-sm tracking-wider">Digital Creator | Explorer</p>
             </div>
 
-            <!-- 简介 -->
-            <div class="text-center mb-10">
-                <p class="text-gray-300 leading-relaxed text-base md:text-lg">
-                    隐匿于数字世界的行者，游走在代码与光影之间<br>
-                    热爱科技、探索未知，保持神秘，奔赴热爱
+            <!-- 个人简介 -->
+            <div class="text-center mb-6">
+                <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    隐匿于数字世界<br>
+                    专注创作，简约而不简单
                 </p>
             </div>
 
-            <!-- 功能按钮组 -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-                <a href="#" class="glass rounded-lg py-3 text-center hover:text-tech-blue hover:scale-105 transition-all duration-300">
-                    <i class="fa fa-home mr-2"></i>主页
+            <!-- 核心技能模块 -->
+            <div class="mb-6">
+                <h3 class="text-center text-sm font-semibold text-secondary mb-3">核心技能</h3>
+                <div class="flex flex-wrap justify-center gap-2">
+                    <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs">创意设计</span>
+                    <span class="px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-xs">数字创作</span>
+                    <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs">技术探索</span>
+                    <span class="px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-xs">内容输出</span>
+                </div>
+            </div>
+
+            <!-- 功能按钮 -->
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <a href="#" class="rounded-lg py-2.5 text-center border border-gray-200 dark:border-gray-700 hover:bg-primary/5 hover:border-primary/30 hover-float">
+                    <i class="fa fa-home mr-1"></i>主页
                 </a>
-                <a href="#" class="glass rounded-lg py-3 text-center hover:text-tech-blue hover:scale-105 transition-all duration-300">
-                    <i class="fa fa-file-text-o mr-2"></i>作品
+                <a href="#" class="rounded-lg py-2.5 text-center border border-gray-200 dark:border-gray-700 hover:bg-primary/5 hover:border-primary/30 hover-float">
+                    <i class="fa fa-th mr-1"></i>作品
                 </a>
-                <a href="#" class="glass rounded-lg py-3 text-center hover:text-tech-blue hover:scale-105 transition-all duration-300">
-                    <i class="fa fa-book mr-2"></i>日志
+                <a href="#" class="rounded-lg py-2.5 text-center border border-gray-200 dark:border-gray-700 hover:bg-primary/5 hover:border-primary/30 hover-float">
+                    <i class="fa fa-book mr-1"></i>日志
                 </a>
-                <a href="#" class="glass rounded-lg py-3 text-center hover:text-tech-blue hover:scale-105 transition-all duration-300">
-                    <i class="fa fa-envelope-o mr-2"></i>联系
+                <a href="#" class="rounded-lg py-2.5 text-center border border-gray-200 dark:border-gray-700 hover:bg-primary/5 hover:border-primary/30 hover-float">
+                    <i class="fa fa-envelope mr-1"></i>联系
                 </a>
             </div>
 
-            <!-- 科技标签 -->
-            <div class="flex flex-wrap justify-center gap-3 mb-10">
-                <span class="px-3 py-1 rounded-full bg-tech-blue/10 text-tech-blue text-sm border border-tech-blue/30">科技</span>
-                <span class="px-3 py-1 rounded-full bg-tech-purple/10 text-tech-purple text-sm border border-tech-purple/30">编程</span>
-                <span class="px-3 py-1 rounded-full bg-tech-cyan/10 text-tech-cyan text-sm border border-tech-cyan/30">创意</span>
-                <span class="px-3 py-1 rounded-full bg-tech-blue/10 text-tech-blue text-sm border border-tech-blue/30">探索</span>
-                <span class="px-3 py-1 rounded-full bg-tech-purple/10 text-tech-purple text-sm border border-tech-purple/30">未知</span>
-            </div>
-
-            <!-- 社交图标 -->
-            <div class="flex justify-center gap-6 text-2xl">
-                <a href="#" class="text-gray-400 hover:text-tech-blue hover:scale-125 transition-all duration-300">
-                    <i class="fa fa-github"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-tech-purple hover:scale-125 transition-all duration-300">
-                    <i class="fa fa-weibo"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-tech-cyan hover:scale-125 transition-all duration-300">
-                    <i class="fa fa-wechat"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-tech-blue hover:scale-125 transition-all duration-300">
-                    <i class="fa fa-link"></i>
-                </a>
+            <!-- 社交链接 -->
+            <div class="flex justify-center gap-6 text-xl mb-2">
+                <a href="#" class="text-secondary hover:text-primary hover-float"><i class="fa fa-github"></i></a>
+                <a href="#" class="text-secondary hover:text-primary hover-float"><i class="fa fa-twitter"></i></a>
+                <a href="#" class="text-secondary hover:text-primary hover-float"><i class="fa fa-weixin"></i></a>
+                <a href="#" class="text-secondary hover:text-primary hover-float"><i class="fa fa-link"></i></a>
             </div>
         </div>
 
-        <!-- 底部署名 -->
-        <footer class="mt-12 text-gray-500 text-sm tracking-wider">
-            <p>© 2026 神秘用户 | Powered By Digital Tech</p>
+        <!-- 底部 -->
+        <footer class="mt-8 text-sm text-gray-500 dark:text-gray-400">
+            © 2025 神秘用户 · 保留所有权利
         </footer>
     </main>
 
     <script>
-        // 1. 鼠标跟随光影效果
-        const cursorLight = document.querySelector('.cursor-light');
-        document.addEventListener('mousemove', (e) => {
-            cursorLight.style.left = e.clientX + 'px';
-            cursorLight.style.top = e.clientY + 'px';
+        // 暗黑/浅色主题切换（本地存储记忆）
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        // 读取本地存储的主题
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
         });
-
-        // 2. 粒子星空背景
-        const canvas = document.getElementById('particles');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
-        const particleCount = 120;
-
-        // 重置画布尺寸
-        function resizeCanvas() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        // 粒子类
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.radius = Math.random() * 2 + 0.5;
-                this.speedX = Math.random() * 0.6 - 0.3;
-                this.speedY = Math.random() * 0.6 - 0.3;
-                this.color = Math.random() > 0.5 ? '#00e5ff' : '#8b5cf6';
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                // 边界回弹
-                if(this.x < 0 || this.x > width) this.speedX *= -1;
-                if(this.y < 0 || this.y > height) this.speedY *= -1;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.fill();
-            }
-        }
-
-        // 初始化粒子
-        function initParticles() {
-            particles = [];
-            for(let i = 0; i < particleCount; i++){
-                particles.push(new Particle());
-            }
-        }
-        initParticles();
-
-        // 绘制连线 + 动画循环
-        function drawLine(p1, p2) {
-            const dx = p1.x - p2.x;
-            const dy = p1.y - p2.y;
-            const dist = Math.sqrt(dx*dx + dy*dy);
-            if(dist < 120) {
-                ctx.beginPath();
-                ctx.strokeStyle = `rgba(0, 229, 255, ${1 - dist/120})`;
-                ctx.lineWidth = 0.5;
-                ctx.moveTo(p1.x, p1.y);
-                ctx.lineTo(p2.x, p2.y);
-                ctx.stroke();
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            for(let i = 0; i < particles.length; i++){
-                particles[i].update();
-                particles[i].draw();
-                // 粒子互相连线
-                for(let j = i+1; j < particles.length; j++){
-                    drawLine(particles[i], particles[j]);
-                }
-            }
-            requestAnimationFrame(animate);
-        }
-        animate();
     </script>
 </body>
 </html>
